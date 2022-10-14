@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, Req, Scope, Inject, ForbiddenException, BadRequestException, Param, Query } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { OrderDto, ValidateOrderDto } from './dto';
@@ -9,9 +10,10 @@ export class OrdersService {
   constructor(@Inject(REQUEST) private request: Request, private prisma: PrismaService) {}
 
   async createOrder(dto: OrderDto): Promise<any> {
-    const clientId = this.request.user as number;
-
+    const clientId = Object.values(this.request.user)[0];
+    const clientEmail = Object.values(this.request.user)[1];
     try {
+      console.log(clientId);
       const order = await this.prisma.order.create({
         data: {
           orderDate: dto.orderDate,
@@ -36,7 +38,8 @@ export class OrdersService {
           id: orderId,
         },
       });
-      if (order.selectedProfessionals.indexOf(professionalId) === -1) throw new ForbiddenException("Vous ne faites pas partie des professionnels sélectionnés par l'utilisateur.");
+      if (order.selectedProfessionals.indexOf(professionalId) === -1)
+        throw new ForbiddenException("Vous ne faites pas partie des professionnels sélectionnés par l'utilisateur.");
       const validatedOrder = await this.prisma.order.update({
         where: {
           id: orderId,

@@ -13,13 +13,10 @@ export class OrderDto {
   @IsDateString()
   @IsNotEmpty()
   orderDate: Date;
-
 }
 
 export class ValidateOrderDto {
   @IsNumber()
   @IsNotEmpty()
   id: number;
-
-  
 }

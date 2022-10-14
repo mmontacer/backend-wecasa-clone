@@ -19,7 +19,7 @@ export class JwtClientStrategy extends PassportStrategy(Strategy, 'jwtClient') {
           id: payload.id,
         },
       });
-      return user.id;
+      return { id: user.id, email: user.email };
     } catch (error) {
       console.log(error);
     }
