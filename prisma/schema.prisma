@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  email       String   @unique
+  hash        String
+  location    String[]
+  phoneNumber String?
+  orders      Order[]
+
+  @@map("clients")
+}
+
+model Professional {
+  id          String      @id @default(uuid())
+  createdAt   DateTime    @default(now())
+  email       String      @unique
+  hash        String
+  phoneNumber String?
+  CIN         String[] // photos recto verso de CIN
+  diplome     String[] // photos du diplome de l'individu
+  photos      String[] // photos de l'individu (de face et de profil)
+  profession  Profession?
+  isVerified  Boolean?    @default(false) // si les photos ont été vérifiés isVerified = true
+  orders      Order[]
+  orderId     Int?
+
+  @@map("professionals")
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  client   Client @relation(fields: [clientId], references: [id])
+  clientId Int
+
+  Professional   Professional? @relation(fields: [professionalId], references: [id])
+  professionalId String?
+  
+  selectedProfessionals String[]
+
+  price     Int?
+  orderDate DateTime?
+  validated Boolean  @default(false)
+}
+
+enum Profession {
+  COIFFEUR
+  MASSEUR
+}
