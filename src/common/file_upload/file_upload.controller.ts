@@ -1,33 +1,38 @@
 import { Bind, Controller, UploadedFiles } from '@nestjs/common';
-import { Injectable, Post, UploadedFile, UseInterceptors, } from '@nestjs/common';
-import { FileInterceptor, FileFieldsInterceptor, FilesInterceptor, AnyFilesInterceptor } from '@nestjs/platform-express';
+import { Injectable, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  FileInterceptor,
+  FileFieldsInterceptor,
+  FilesInterceptor,
+  AnyFilesInterceptor,
+} from '@nestjs/platform-express';
 import { FileUploadService } from './file_upload.service';
 
-@Controller('file')
+@Controller('files')
 export class FileUploadController {
   constructor(private fileUploadService: FileUploadService) {}
-
-  @Post('/')
+  @Post('/register-pro')
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'file', maxCount: 1 },
-      { name: 'file2', maxCount: 1 },
+      { name: 'diplome', maxCount: 1 },
+      { name: 'cin', maxCount: 2 },
+      { name: 'profilePhotoWithCin', maxCount: 1 },
     ])
   )
-  uploadFile(@UploadedFiles() files: { avatar?: Express.Multer.File[]; background?: Express.Multer.File[] }) {
+  uploadFile(@UploadedFiles() files: { diplome: Express.Multer.File[]; cin: Express.Multer.File[] }) {
     console.log(files);
   }
 
   @Post('/array')
-  @UseInterceptors(FilesInterceptor('files',3))
+  @UseInterceptors(FilesInterceptor('files', 3))
   @Bind(UploadedFiles())
   uploadFiles(files) {
     console.log(files);
   }
 
   @Post('any')
-@UseInterceptors(AnyFilesInterceptor())
-uploadFileAny(@UploadedFiles() files: Array<Express.Multer.File>) {
-  console.log(files);
-}
+  @UseInterceptors(AnyFilesInterceptor())
+  uploadFileAny(@UploadedFiles() files: Array<Express.Multer.File>) {
+    console.log(files);
+  }
 }

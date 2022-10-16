@@ -13,7 +13,6 @@ export class OrdersService {
     const clientId = Object.values(this.request.user)[0];
     const clientEmail = Object.values(this.request.user)[1];
     try {
-      console.log(clientId);
       const order = await this.prisma.order.create({
         data: {
           orderDate: dto.orderDate,
@@ -47,7 +46,7 @@ export class OrdersService {
         data: {
           professionalId,
           selectedProfessionals: [],
-          validated: true,
+          status: 'PRIS',
         },
       });
       return validatedOrder;

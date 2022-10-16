@@ -19,6 +19,7 @@ model Client {
   phoneNumber String?
   orders      Order[]
   adresses    String[]
+
   @@map("clients")
 }
 
@@ -35,6 +36,7 @@ model Professional {
   isVerified  Boolean?    @default(false) // si les photos ont été vérifiés isVerified = true
   orders      Order[]
   orderId     Int?
+  location    String[]
 
   @@map("professionals")
 }
@@ -48,15 +50,29 @@ model Order {
 
   Professional   Professional? @relation(fields: [professionalId], references: [id])
   professionalId String?
-  
+
   selectedProfessionals String[]
 
   price     Int?
   orderDate DateTime?
-  validated Boolean  @default(false)
+  status    OrderStatus @default(LIBRE)
+
+  @@map("orders")
+}
+
+model Admin {
+  id          String   @id @default(uuid()) @db.Char(5)
+  createdAt   DateTime @default(now())
+  phoneNumber String
 }
 
 enum Profession {
   COIFFEUR
   MASSEUR
+}
+
+enum OrderStatus {
+  LIBRE
+  PRIS
+  FINI
 }

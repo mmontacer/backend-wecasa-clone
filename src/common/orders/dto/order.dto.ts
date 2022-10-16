@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString, IsArray, ArrayMinSize, IsDate, IsDateString, IsNumber } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString, IsArray, ArrayMinSize, IsDateString, IsNumber } from 'class-validator';
 
 export class OrderDto {
   @IsArray()
