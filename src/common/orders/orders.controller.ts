@@ -11,6 +11,11 @@ export class OrdersController {
   createOrder(@Body() dto: OrderDto) {
     return this.orderService.createOrder(dto);
   }
+  @UseGuards(AuthGuard('jwtClient'))
+  @Post('get-client-history')
+  getClientHistory() {
+    return this.orderService.getClientHistory();
+  }
   @UseGuards(AuthGuard('jwtPro'))
   @Patch('validate/:id')
   validateOrder(@Param('id', ParseIntPipe) orderId: number) {

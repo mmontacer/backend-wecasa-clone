@@ -53,7 +53,16 @@ export class OrdersService {
     } catch (error) {
       return error;
     }
-
-    //const professionalId = this.request.user as string;
+  }
+  async getClientHistory(): Promise<any> {
+    const clientId = Object.values(this.request.user)[0];
+    try {
+      const ordersHistory = await this.prisma.order.findMany({
+        where: {
+          id: clientId,
+          status: 'FINI',
+        },
+      });
+    } catch (error) {}
   }
 }
