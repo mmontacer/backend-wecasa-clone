@@ -11,32 +11,35 @@ datasource db {
 }
 
 model Client {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  email       String   @unique
-  hash        String
-  location    String[]
-  phoneNumber String?
-  orders      Order[]
-  adresses    String[]
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  email        String         @unique
+  hash         String
+  location     String[]
+  phoneNumber  String?
+  orders       Order[]
+  adresses     String[]
+  Conversation Conversation[]
 
   @@map("clients")
 }
 
 model Professional {
-  id          String      @id @default(uuid())
-  createdAt   DateTime    @default(now())
-  email       String      @unique
-  hash        String
-  phoneNumber String?
-  CIN         String[] // photos recto verso de CIN
-  diplome     String[] // photos du diplome de l'individu
-  photos      String[] // photos de l'individu (de face et de profil)
-  profession  Profession?
-  isVerified  Boolean?    @default(false) // si les photos ont été vérifiés isVerified = true
-  orders      Order[]
-  orderId     Int?
-  location    String[]
+  id           String         @id @default(uuid())
+  createdAt    DateTime       @default(now())
+  email        String         @unique
+  hash         String
+  phoneNumber  String?
+  CIN          String[] // photos recto verso de CIN
+  diplome      String[] // photos du diplome de l'individu
+  photos       String[] // photos de l'individu (de face et de profil)
+  profession   Profession?
+  isVerified   Boolean?       @default(false) // si les photos ont été vérifiés isVerified = true
+  orders       Order[]
+  orderId      Int?
+  location     String[]
+  rating       Int[]
+  Conversation Conversation[]
 
   @@map("professionals")
 }
@@ -60,6 +63,24 @@ model Order {
   @@map("orders")
 }
 
+model Conversation {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  client    Client   @relation(fields: [clientId], references: [id])
+  clientId  Int
+
+  Professional   Professional? @relation(fields: [professionalId], references: [id])
+  professionalId String?
+  Message        Message[]
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId Int
+}
+
 model Admin {
   id          String   @id @default(uuid()) @db.Char(5)
   createdAt   DateTime @default(now())
@@ -75,4 +96,5 @@ enum OrderStatus {
   LIBRE
   PRIS
   FINI
+  ANNULE
 }
