@@ -10,7 +10,7 @@ export class OrdersService {
   constructor(@Inject(REQUEST) private request: Request, private prisma: PrismaService) {}
 
   async createOrder(dto: OrderDto): Promise<any> {
-    const clientId = Object.values(this.request.user)[0];
+    const clientId = Object.values(this.request.user)[0] as number;
     const clientEmail = Object.values(this.request.user)[1];
     try {
       const order = await this.prisma.order.create({
@@ -28,7 +28,7 @@ export class OrdersService {
   }
 
   async validateOrder(orderId: number): Promise<any> {
-    const professionalId = Object.values(this.request.user)[0];
+    const professionalId = Object.values(this.request.user)[0] as string;
     const professionalEmail = Object.values(this.request.user)[1];
     const professionalIsVerified = Object.values(this.request.user)[2];
 
